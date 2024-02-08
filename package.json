@@ -2,16 +2,25 @@
   "name": "apple-forecast-app",
   "private": true,
   "dependencies": {
-    "@rails/actioncable": "^6.0.0",
-    "@rails/activestorage": "^6.0.0",
-    "@rails/ujs": "^6.0.0",
-    "@rails/webpacker": "5.4.4",
-    "turbolinks": "^5.2.0",
-    "webpack": "^4.46.0",
-    "webpack-cli": "^3.3.12"
+    "@rails/actioncable": "^7.0.0",
+    "@rails/activestorage": "^7.0.0",
+    "@rails/ujs": "^7.0.0",
+    "autoprefixer": "^10.4.17",
+    "axios": "^1.6.7",
+    "esbuild": "^0.20.0",
+    "postcss": "^8.4.34",
+    "postcss-cli": "^11.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-google-autocomplete": "^2.7.3",
+    "tailwindcss": "^3.4.1",
+    "turbolinks": "^5.2.0"
   },
   "version": "0.1.0",
-  "devDependencies": {
-    "webpack-dev-server": "^3"
+  "devDependencies": {},
+  "scripts": {
+    "build:js": "node esbuild.config.js",
+    "build:css": "npx postcss app/javascript/stylesheets/application.tailwind.css -o app/assets/builds/application.css",
+    "build": "yarn build:js && yarn build:css"
   }
 }
