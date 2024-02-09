@@ -2,7 +2,7 @@
 
 ## Check it out here!:
 
-[Apple Forecast App] (https://apple-forecast-app-b586018d8099.herokuapp.com/)
+[Apple Forecast App](https://apple-forecast-app-b586018d8099.herokuapp.com/)
 
 ## Description
 
@@ -54,9 +54,9 @@ test:
 
 As you might have noticed, there are two API keys you'll need to obtain on your own.
 
-For the Google Maps API key, check out the instructions [here.] (https://developers.google.com/maps/documentation/embed/get-api-key)
+For the Google Maps API key, check out the instructions [here.](https://developers.google.com/maps/documentation/embed/get-api-key)
 
-For a Weather API key, go [here] (https://www.weatherapi.com/) and sign up.
+For a Weather API key, go [here](https://www.weatherapi.com/) and sign up.
 
 Once you have your `config/application.yml` file set up, you should be set to get started. 
 
