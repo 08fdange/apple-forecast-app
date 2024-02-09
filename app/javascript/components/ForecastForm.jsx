@@ -20,8 +20,6 @@ const ForecastForm = () => {
     }
   };
 
-  console.log('forecastData', forecastData);
-
   return (
     <div className="max-w-md mx-auto mt-10">
       <h3 className="font-bold text-3xl mb-2">Weather</h3>
