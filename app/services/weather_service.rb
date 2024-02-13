@@ -2,12 +2,12 @@ require 'faraday'
 require 'json'
 
 class WeatherService
-  def self.fetch_weather(zip_code)
+  def self.fetch_weather(zip_code, days = 1)
     api_key = ENV["WEATHER_API_KEY"]
     url = "https://api.weatherapi.com/v1/forecast.json"
 
     begin
-      response = Faraday.get(url, { key: api_key, q: zip_code, days: 1 })
+      response = Faraday.get(url, { key: api_key, q: zip_code, days: days })
 
       if response.success?
         JSON.parse(response.body)

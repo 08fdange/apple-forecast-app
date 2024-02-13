@@ -24,6 +24,7 @@ module WeatherDataProcessor
                 maxtemp_f: day.dig("day", "maxtemp_f"),
                 mintemp_f: day.dig("day", "mintemp_f"),
                 condition: {
+                  text: day.dig("day", "condition", "text"),
                   icon: day.dig("day", "condition", "icon")
                 }
               }

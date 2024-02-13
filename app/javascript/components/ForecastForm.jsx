@@ -22,11 +22,11 @@ const ForecastForm = () => {
 
   return (
     <div className="max-w-md mx-auto mt-10">
-      <h3 className="font-bold text-3xl mb-2">Weather</h3>
+      <h3 className="font-bold text-3xl mb-2 text-white">Weather</h3>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <AddressAutocompleteInput onPlaceSelected={handlePlaceSelected} />
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded"
           type="submit"
         >
           Get Forecast
