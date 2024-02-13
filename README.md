@@ -40,9 +40,6 @@ development:
   DB_PASSWORD: "postgres"
   DB_DBNAME: "apple_forecast_app_development"
 
-  # Google Maps API Key
-  REACT_APP_GOOGLE_MAPS_API_KEY: "WHATEVER_YOUR_GOOGLE_MAPS_API_KEY_IS"
-
   # Weather API Credentials
   WEATHER_API_KEY: "WHATEVER_YOUR_WEATHER_API_KEY_IS"
 
@@ -52,11 +49,11 @@ test:
   DB_PASSWORD: test_password
 ```
 
-As you might have noticed, there are two API keys you'll need to obtain on your own.
+There are two API keys you'll need to obtain on your own:
 
-For the Google Maps API key, check out the instructions [here.](https://developers.google.com/maps/documentation/embed/get-api-key)
+For the Weather API key, go [here](https://www.weatherapi.com/) and sign up. You'll set this in the application.yml file.
 
-For a Weather API key, go [here](https://www.weatherapi.com/) and sign up.
+You'll also need a Google Maps API key, check out the instructions [here.](https://developers.google.com/maps/documentation/embed/get-api-key). Once you obtain that you'll set it in your terminal under the project directory like this: `export REACT_APP_GOOGLE_MAPS_API_KEY='WhateverYourGoogleMapsAPIKeyIs`.
 
 Once you have your `config/application.yml` file set up, you should be set to get started. 
 
