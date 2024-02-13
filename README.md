@@ -96,7 +96,9 @@ There are several design patterns I implemented in this application. Here are so
 
 ## Future Feature Additions
 
-- Expanding the API endpoint to receive an additional parameter for the number days of forecasts was something I considered and could implement easily in the future
+- ~~Expanding the API endpoint to receive an additional parameter for the number days of forecasts was something I considered and could implement easily in the future~~ (This feature was added 2/12/24)
+
+- Adding a switch for displaying temperatures in fahrenheit or celcius
 
 - Adding a user model, authentication and the ability for those users to save their forecast locations for quick access to updated forecasts 
 
@@ -135,11 +137,9 @@ Concerns: `WeatherDataProcessor` module is specifically designed to transform an
 **React (Frontend)**
 
 - `AddressAutocompleteInput` is responsible for rendering our autocomplete address input with Google Maps API integration
-- `ForecastDisplay` simply displays our forecast data
+- `TodaysForecast` is our component that displays the data for the day-of's forecast and the location (city) of the forecast data displayed
+- `ExtendedForecast` is in charge of mapping through our multiple days (10 to be specific) of forecasts and rendering elements for each one
+- `ForecastDisplay` simply displays our forecast components (TodaysForecast and ExtendedForecast)
 - `ForecastForm` renders our form, holds state for our forecast and displays the forecast data using our ForecastDisplay. Given more time, I would likely break this out to separate concerns. The form would be just the form and the state would be lifted to a main/page component, responsible for rendering the main (and currently only) feature of our application
-- `IPhoneWrapper` is a component that is responsible for wrapping our application inside a iPhone simulator-looking image.
+- `IPhoneWrapper` is a component that is responsible for wrapping our application inside a iPhone simulator-looking image and displaying night/day backgrounds
 - `useForecast` is a hook built to handle the axios API call to our forecast-fetching endpoint
-
-
-
-
