@@ -4,8 +4,9 @@ module V1
 
     def fetch_forecast
       zip_code = params[:zip_code]
+      days = params[:days] || 1
       if zip_code
-        forecast_data, cached = ForecastUpdateService.update_forecast(zip_code)
+        forecast_data, cached = ForecastUpdateService.update_forecast(zip_code, days)
         if forecast_data.present?
           render json: { forecast_data: forecast_data, cached: cached }, status: :ok
         else
