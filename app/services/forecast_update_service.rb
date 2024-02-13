@@ -7,7 +7,7 @@ class ForecastUpdateService
     forecast_data, cached = fetch_from_cache(redis_key)
 
     unless cached
-      forecast_data, cached = fetch_from_database(zip_code)
+      forecast_data, cached = fetch_from_database(zip_code, days)
       unless cached
         forecast_data, cached = fetch_and_update(zip_code, redis_key, days)
       end
@@ -27,7 +27,7 @@ class ForecastUpdateService
     end
   end
 
-  def self.fetch_from_database(zip_code)
+  def self.fetch_from_database(zip_code, days)
     forecast = Forecast.find_by(zip_code: zip_code)
     if forecast && !forecast.expired?
       # Refresh Redis cache as a fallback mechanism
