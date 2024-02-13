@@ -100,6 +100,8 @@ There are several design patterns I implemented in this application. Here are so
 
 - Adding a switch for displaying temperatures in fahrenheit or celcius
 
+- Loading state for when the API is fetching data
+
 - Adding a user model, authentication and the ability for those users to save their forecast locations for quick access to updated forecasts 
 
 - Adding additional UI updates
