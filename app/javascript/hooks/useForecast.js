@@ -9,7 +9,7 @@ const useForecast = () => {
   const fetchForecast = async (zipCode) => {
     setError('');
     try {
-      const response = await axios.post(`/v1/forecasts/fetch_forecast`, { zip_code: zipCode });
+      const response = await axios.post(`/v1/forecasts/fetch_forecast`, { zip_code: zipCode, days: 10 });
       setForecastData(response.data.forecast_data);
       setIsCached(response.data.cached);
     } catch (err) {
