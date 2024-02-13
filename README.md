@@ -96,6 +96,8 @@ There are several design patterns I implemented in this application. Here are so
 
 ## Future Feature Additions
 
+- Improved error handling from the backend to the frontend
+
 - ~~Expanding the API endpoint to receive an additional parameter for the number days of forecasts was something I considered and could implement easily in the future~~ (This feature was added 2/12/24)
 
 - Adding a switch for displaying temperatures in fahrenheit or celcius
