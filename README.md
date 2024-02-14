@@ -61,7 +61,7 @@ Once you have your `config/application.yml` file set up, you should be set to ge
 
 1. run `bundle install`
 2. run `yarn build`
-3. run `rails s`
+3. run `bin/dev`
 
 
 ## Usage
@@ -93,7 +93,7 @@ There are several design patterns I implemented in this application. Here are so
 
 ## Future Feature Additions
 
-- Improved error handling from the backend to the frontend
+- ~~Improved error handling from the backend to the frontend~~ (This feature was added 2/13/24)
 
 - ~~Expanding the API endpoint to receive an additional parameter for the number days of forecasts was something I considered and could implement easily in the future~~ (This feature was added 2/12/24)
 
