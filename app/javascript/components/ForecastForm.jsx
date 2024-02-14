@@ -26,7 +26,8 @@ const ForecastForm = () => {
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <AddressAutocompleteInput onPlaceSelected={handlePlaceSelected} />
         <button
-          className="bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded"
+          className="bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded disabled:bg-gray-500"
+          disabled={!zipCode}
           type="submit"
         >
           Get Forecast
@@ -41,7 +42,11 @@ const ForecastForm = () => {
         )
       }
 
-      {error && <p className="text-red-500">{error}</p>}
+      {error && (
+        <div className="mt-4 p-2 rounded-lg bg-gray-700 bg-opacity-80">
+          <p className="text-red-500">{error}</p>
+        </div>
+      )}
     </div>
   );
 };

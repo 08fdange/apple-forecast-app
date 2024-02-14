@@ -9,13 +9,13 @@ const ExtendedForecast = ({ forecast }) =>  {
       <div className="flex flex-col">
         {forecast.forecastday.map((item, index) => {
             const date = parseISO(item.date);
-            const formattedDate = isToday(date) ? 'Today' : format(date, 'EEEE');
+            const formattedDate = isToday(date) ? 'Today' : format(date, 'EE');
             return (
               <div 
                 className="flex items-center justify-between border-t border-white border-opacity-75 py-2"
                 key={`${item.date}-${index}`}
               >
-                <div className="flex items-center">
+                <div className="flex justify-between items-center w-[27%]">
                   <p className="text-white">{formattedDate}</p>
                   <img
                     className="w-8 h-8"
