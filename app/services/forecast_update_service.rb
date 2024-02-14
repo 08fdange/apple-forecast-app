@@ -2,57 +2,64 @@ class ForecastUpdateService
   include WeatherDataProcessor
   EXPIRATION_IN_SECONDS = 1800
 
+  # Main method to update or fetch the forecast
   def self.update_forecast(zip_code, days)
     redis_key = "forecast:#{zip_code}:days:#{days}"
-    forecast_data, cached = fetch_from_cache(redis_key)
+    result = fetch_from_cache(redis_key)
 
-    unless cached
-      forecast_data, cached = fetch_from_database(zip_code, days)
-      unless cached
-        forecast_data, cached = fetch_and_update(zip_code, redis_key, days)
+    unless result[:success] && result[:cached]
+      result = fetch_from_database(zip_code, days)
+      unless result[:success] && result[:cached]
+        result = fetch_and_update(zip_code, redis_key, days)
       end
     end
 
-    [forecast_data, cached]
+    result
   end
 
   private
 
+  # Fetches forecast data from cache
   def self.fetch_from_cache(redis_key)
     cached_forecast = $redis.get(redis_key)
     if cached_forecast
-      [JSON.parse(cached_forecast, symbolize_names: true), true]
+      { success: true, data: JSON.parse(cached_forecast, symbolize_names: true), cached: true }
     else
-      [nil, false]
+      { cached: false }
     end
   end
 
+  # Fetches forecast data from the database
   def self.fetch_from_database(zip_code, days)
     forecast = Forecast.find_by(zip_code: zip_code)
-    if forecast && !forecast.expired?
-      # Refresh Redis cache as a fallback mechanism
+    if forecast && !forecast.expired? && forecast.days == days
       $redis.set("forecast:#{zip_code}:days:#{days}", forecast.forecast_data.to_json, ex: EXPIRATION_IN_SECONDS)
-      [forecast.forecast_data, true]
+      { success: true, data: forecast.forecast_data, cached: true }
     else
-      [nil, false]
+      { cached: false }
     end
   end
 
+  # Fetches and updates the forecast data by calling an external service
   def self.fetch_and_update(zip_code, redis_key, days)
-    fetched_data = WeatherService.fetch_weather(zip_code, days)
-    if fetched_data.present?
-      processed_data = process_weather_data(fetched_data)
-      update_forecast_record(zip_code, processed_data)
+    result = WeatherService.fetch_weather(zip_code, days)
+    if result[:data].present?
+      processed_data = process_weather_data(result[:data])
+      update_forecast_record(zip_code, processed_data, days)
       $redis.set(redis_key, processed_data.to_json, ex: EXPIRATION_IN_SECONDS)
-      [processed_data, false]
+      { success: true, data: processed_data, cached: false }
+    elsif result[:error].present?
+      { success: false, error: result[:error] }
     else
-      [nil, false]
+      { success: false, error: 'Unknown error occurred.' }
     end
   end
 
-  def self.update_forecast_record(zip_code, forecast_data)
+  # Updates or creates a forecast record in the database
+  def self.update_forecast_record(zip_code, forecast_data, days)
     forecast = Forecast.find_or_initialize_by(zip_code: zip_code)
     forecast.forecast_data = forecast_data
+    forecast.days = days
     forecast.save!
   end
 end

@@ -6,16 +6,19 @@ module V1
       zip_code = params[:zip_code]
       days = params[:days].to_i if params[:days].present?
       days ||= 1
-      if zip_code
-        forecast_data, cached = ForecastUpdateService.update_forecast(zip_code, days)
-        if forecast_data.present?
-          render json: { forecast_data: forecast_data, cached: cached }, status: :ok
+
+      if zip_code.present?
+        result = ForecastUpdateService.update_forecast(zip_code, days)
+        if result[:success]
+          render json: { forecast_data: result[:data], cached: result[:cached] }, status: :ok
         else
-          render json: { error: 'Unable to fetch forecast data.' }, status: :not_found
+          render json: { error: { message: result[:error] || 'Unable to fetch forecast data.' } }, status: :not_found
         end
       else
-        render json: { error: 'Unable to resolve address to a zip code.' }, status: :bad_request
+        render json: { error: { message: 'Zip code is required.' } }, status: :bad_request
       end
+    rescue StandardError => e
+      render json: { error: { message: "An unexpected error occurred: #{e.message}" } }, status: :internal_server_error
     end
   end
 end
