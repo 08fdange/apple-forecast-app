@@ -10,15 +10,23 @@ class WeatherService
       response = Faraday.get(url, { key: api_key, q: zip_code, days: days })
 
       if response.success?
-        JSON.parse(response.body)
+        { data: JSON.parse(response.body) }
       else
-        Rails.logger.error "WeatherService fetch_weather error: HTTP #{response.status} - #{response.body}"
-        nil
+        begin
+          error_details = JSON.parse(response.body)
+          error_message = error_details.dig('error', 'message') || "HTTP #{response.status} - Unexpected error"
+        rescue JSON::ParserError
+          error_message = "HTTP #{response.status} - Error parsing error response"
+        end
+        
+        Rails.logger.error error_message
+        { error: "Error fetching weather: #{error_message}" }
       end
     rescue Faraday::Error => e
-      # Handle low-level network errors
-      Rails.logger.error "WeatherService fetch_weather connection error: #{e.message}"
-      nil
+      error_message = "WeatherService connection error: #{e.message}"
+      Rails.logger.error error_message
+      { error: error_message }
     end
   end
 end
+

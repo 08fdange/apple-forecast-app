@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe V1::ForecastsController, type: :controller do
-  describe 'GET #fetch_forecast' do
+RSpec.describe V1::ForecastsController, type: :request do
+  describe 'POST #fetch_forecast' do
     let(:zip_code) { '12345' }
     let(:forecast_data) { { "current" => { "temp_f" => 70.0 } } }
     let(:cached) { false }
@@ -11,8 +11,9 @@ RSpec.describe V1::ForecastsController, type: :controller do
       let(:days) { 3 }
       
       before do
-        allow(ForecastUpdateService).to receive(:update_forecast).with(zip_code, days).and_return([forecast_data, cached])
-        get :fetch_forecast, params: { zip_code: zip_code, days: days }
+        allow(ForecastUpdateService).to receive(:update_forecast).with(zip_code, days)
+          .and_return({ success: true, data: forecast_data, cached: cached })
+        post "/v1/forecasts/fetch_forecast", params: { zip_code: zip_code, days: days }
       end
 
       it 'returns http success' do
@@ -26,8 +27,9 @@ RSpec.describe V1::ForecastsController, type: :controller do
 
     context 'when no days parameter is provided' do
       before do
-        allow(ForecastUpdateService).to receive(:update_forecast).with(zip_code, default_days).and_return([forecast_data, cached])
-        get :fetch_forecast, params: { zip_code: zip_code }
+        allow(ForecastUpdateService).to receive(:update_forecast).with(zip_code, default_days)
+          .and_return({ success: true, data: forecast_data, cached: cached })
+        post "/v1/forecasts/fetch_forecast", params: { zip_code: zip_code }
       end
 
       it 'returns http success with default days value' do
@@ -40,9 +42,12 @@ RSpec.describe V1::ForecastsController, type: :controller do
     end
 
     context 'when no forecast data is found' do
+      let(:error_message) { 'Unable to fetch forecast data.' }
+      
       before do
-        allow(ForecastUpdateService).to receive(:update_forecast).with(zip_code, default_days).and_return([nil, false])
-        get :fetch_forecast, params: { zip_code: zip_code }
+        allow(ForecastUpdateService).to receive(:update_forecast).with(zip_code, default_days)
+          .and_return({ success: false, error: error_message })
+        post "/v1/forecasts/fetch_forecast", params: { zip_code: zip_code }
       end
 
       it 'returns http not found' do
@@ -50,13 +55,15 @@ RSpec.describe V1::ForecastsController, type: :controller do
       end
 
       it 'returns an error message' do
-        expect(JSON.parse(response.body)).to eq({ 'error' => 'Unable to fetch forecast data.' })
+        expect(JSON.parse(response.body)).to eq({ 'error' => { 'message' => error_message } })
       end
     end
 
     context 'when no zip code is provided' do
+      let(:error_message) { 'Zip code is required.' }
+
       before do
-        get :fetch_forecast, params: { days: default_days }
+        post "/v1/forecasts/fetch_forecast", params: { days: default_days }
       end
 
       it 'returns http bad request' do
@@ -64,8 +71,9 @@ RSpec.describe V1::ForecastsController, type: :controller do
       end
 
       it 'returns an error message' do
-        expect(JSON.parse(response.body)).to eq({ 'error' => 'Unable to resolve address to a zip code.' })
+        expect(JSON.parse(response.body)).to eq({ 'error' => { 'message' => error_message } })
       end
     end
   end
 end
+
