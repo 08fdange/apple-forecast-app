@@ -3,9 +3,12 @@ import { format, parseISO, isToday } from 'date-fns';
 import getWeatherIconUrl from '../utils/getWeatherIcon';
 
 const ExtendedForecast = ({ forecast }) =>  {
+  const forecastLength = forecast.forecastday.length;
+  const forecastTitle = `${forecastLength}-DAY FORECAST`;
+
   return (
     <div className="mt-4 p-2 rounded-lg bg-gray-700 bg-opacity-80">
-      <p className="text-sm text-gray-200 mb-1">10-DAY FORECAST</p>
+      <p className="text-sm text-gray-200 mb-1">{forecastTitle}</p>
       <div className="flex flex-col">
         {forecast.forecastday.map((item, index) => {
             const date = parseISO(item.date);
